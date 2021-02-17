@@ -16,6 +16,7 @@ public class ThirdPersonMovement : MonoBehaviour
 	public LayerMask groundMask;
 	Vector3 velocity;
 	bool isGrounded;
+	public Animator anim;
 
     // Update is called once per frame
     void Update()
@@ -33,9 +34,13 @@ public class ThirdPersonMovement : MonoBehaviour
 			float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.eulerAngles.y;
 			float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime);
 			transform.rotation = Quaternion.Euler(0f, targetAngle, 0f);
+			anim.SetFloat("Speed", 1f);
 			
 			Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
 			controller.Move(moveDir.normalized * speed * Time.deltaTime);
+		}
+		else {
+			anim.SetFloat("Speed", 0f);
 		}
 		if (Input.GetButtonDown("Jump") && isGrounded) {
 			velocity.y += Mathf.Sqrt(jumpHeight * -2f * gravity);
